@@ -24,6 +24,29 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
 
     <style>
+      /* Critical viewport and layout fixes */
+      * {
+        box-sizing: border-box;
+      }
+      
+      html, body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+        margin: 0;
+        padding: 0;
+      }
+      
+      /* Override Bootstrap RTL potential issues */
+      [dir="rtl"] body {
+        text-align: right;
+      }
+      
+      [dir="rtl"] .container {
+        padding-left: 15px;
+        padding-right: 15px;
+      }
+
       :root { --topbar-height: 36px; --navbar-height: 70px; }
 
       html { scroll-behavior: smooth; }
@@ -32,17 +55,40 @@
         font-family: 'Cairo', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji';
         padding-top: calc(var(--topbar-height) + var(--navbar-height));
         background-color: #f4f7f7;
+        margin: 0;
+        padding-left: 0;
+        padding-right: 0;
+        overflow-x: hidden;
       }
 
       section { scroll-margin-top: calc(var(--topbar-height) + var(--navbar-height)); }
 
       /* Topbar */
-      .topbar { height: var(--topbar-height); background: #0f4f54; color: #d7f1f1; font-size: 0.875rem; }
+      .topbar { 
+        height: var(--topbar-height); 
+        background: #0f4f54; 
+        color: #d7f1f1; 
+        font-size: 0.875rem; 
+        width: 100%;
+        left: 0;
+        right: 0;
+        position: fixed;
+        top: 0;
+        z-index: 1031;
+      }
       .topbar a { color: #d7f1f1; text-decoration: none; }
       .topbar .social a { opacity: .9; }
 
       /* Navbar */
-      .navbar { height: var(--navbar-height); }
+      .navbar { 
+        height: var(--navbar-height); 
+        width: 100%;
+        left: 0;
+        right: 0;
+        position: fixed;
+        top: var(--topbar-height);
+        z-index: 1030;
+      }
 
       /* Hero */
       .hero {
@@ -53,8 +99,15 @@
           url('assets/hero.png'),
           url('assets/hero.jpeg'),
           url('https://images.unsplash.com/photo-1586773860418-d37222d8fce3?q=80&w=1600&auto=format&fit=crop');
-        background-size: cover; background-position: center; color: #fff;
-        display: flex; align-items: center; text-align: center;
+        background-size: cover; 
+        background-position: center; 
+        color: #fff;
+        display: flex; 
+        align-items: center; 
+        text-align: center;
+        width: 100%;
+        margin: 0;
+        padding: 0;
       }
 
       .hero .btn-danger { padding-inline: 1.25rem; }
@@ -74,10 +127,281 @@
       footer a { color: #cfe8e8; text-decoration: none; }
 
       /* WhatsApp Floating */
-      .whatsapp-float { position: fixed; left: 18px; bottom: 18px; width: 52px; height: 52px; background: #25D366; color: #fff; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 .5rem 1rem rgba(0,0,0,.15); z-index: 1030; }
+      .whatsapp-float { 
+        position: fixed; 
+        right: 18px; 
+        bottom: 18px; 
+        width: 52px; 
+        height: 52px; 
+        background: #25D366; 
+        color: #fff; 
+        border-radius: 50%; 
+        display: inline-flex; 
+        align-items: center; 
+        justify-content: center; 
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15); 
+        z-index: 1030; 
+      }
       .whatsapp-float:hover { color: #fff; filter: brightness(0.95); }
 
       .shadow-soft { box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.12); }
+      
+      /* Gallery hover effects */
+      .gallery-item {
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      .gallery-item:hover {
+        transform: translateY(-5px);
+      }
+      .gallery-item:hover img { 
+        transform: scale(1.05); 
+      }
+      .gallery-item:hover .gallery-overlay { 
+        opacity: 1 !important; 
+      }
+      .gallery-item .gallery-overlay {
+        background: linear-gradient(135deg, rgba(15, 109, 114, 0.8), rgba(37, 160, 168, 0.8)) !important;
+      }
+      
+      /* Background gradient */
+      .bg-gradient-light { background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); }
+      
+      /* Navbar improvements */
+      .navbar-nav .nav-link { 
+        position: relative; 
+        transition: color 0.3s ease; 
+      }
+      .navbar-nav .nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: #0f6d72;
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+      }
+      .navbar-nav .nav-link:hover::after,
+      .navbar-nav .nav-link.active::after {
+        width: 100%;
+      }
+      
+      /* Responsive navbar improvements */
+      @media (max-width: 991.98px) {
+        .navbar-collapse {
+          background: rgba(255, 255, 255, 0.98);
+          backdrop-filter: blur(10px);
+          border-radius: 0 0 1rem 1rem;
+          box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+          margin-top: 0.5rem;
+          padding: 1rem;
+        }
+        .navbar-nav .nav-link {
+          padding: 0.75rem 1rem;
+          border-radius: 0.5rem;
+          margin: 0.25rem 0;
+          transition: all 0.3s ease;
+        }
+        .navbar-nav .nav-link:hover {
+          background: rgba(15, 109, 114, 0.1);
+          color: #0f6d72 !important;
+        }
+        .navbar-nav .nav-item.ms-lg-3 {
+          margin-left: 0 !important;
+          margin-top: 0.5rem;
+        }
+      }
+
+      /* Mobile layout fixes */
+      @media (max-width: 767.98px) {
+        body {
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+          overflow-x: hidden !important;
+          width: 100% !important;
+          max-width: 100vw !important;
+          margin: 0 !important;
+        }
+        
+        .container {
+          padding-left: 15px !important;
+          padding-right: 15px !important;
+          max-width: 100% !important;
+          width: 100% !important;
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+        }
+        
+        .hero {
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+          width: 100% !important;
+          max-width: 100vw !important;
+        }
+        
+        .hero .container {
+          padding-left: 15px !important;
+          padding-right: 15px !important;
+          max-width: 100% !important;
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+        }
+        
+        .navbar .container {
+          padding-left: 15px !important;
+          padding-right: 15px !important;
+          max-width: 100% !important;
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+        }
+        
+        .topbar .container {
+          padding-left: 15px !important;
+          padding-right: 15px !important;
+          max-width: 100% !important;
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+        }
+        
+        /* Fix RTL mobile issues */
+        .navbar-nav {
+          text-align: right !important;
+        }
+        
+        .navbar-nav .nav-link {
+          text-align: right !important;
+        }
+        
+        /* Ensure proper centering on mobile */
+        .hero h1 {
+          font-size: 2rem !important;
+          line-height: 1.2 !important;
+        }
+        
+        .hero .lead {
+          font-size: 1rem !important;
+        }
+
+        /* Prevent horizontal overflow */
+        .row {
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+        }
+
+        .col, .col-md-4, .col-lg-6, .col-xl-9 {
+          padding-left: 15px !important;
+          padding-right: 15px !important;
+        }
+
+        /* Override Bootstrap RTL issues */
+        [dir="rtl"] .container {
+          padding-left: 15px !important;
+          padding-right: 15px !important;
+        }
+
+        [dir="rtl"] .row {
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+        }
+
+        [dir="rtl"] .col, [dir="rtl"] .col-md-4, [dir="rtl"] .col-lg-6, [dir="rtl"] .col-xl-9 {
+          padding-left: 15px !important;
+          padding-right: 15px !important;
+        }
+
+        /* Force full width */
+        html, body {
+          width: 100% !important;
+          max-width: 100% !important;
+          overflow-x: hidden !important;
+        }
+
+        /* Fix any potential Bootstrap RTL positioning */
+        .navbar, .topbar, .hero, section, header, footer {
+          width: 100% !important;
+          max-width: 100vw !important;
+          left: 0 !important;
+          right: 0 !important;
+        }
+      }
+
+      /* Extra small devices */
+      @media (max-width: 575.98px) {
+        .hero h1 {
+          font-size: 1.75rem !important;
+        }
+        
+        .hero .lead {
+          font-size: 0.9rem !important;
+        }
+        
+        .container {
+          padding-left: 10px !important;
+          padding-right: 10px !important;
+        }
+      }
+
+      /* Additional RTL fixes for Bootstrap compatibility */
+      @media (max-width: 767.98px) {
+        /* Override any Bootstrap RTL margin/padding issues */
+        .ms-auto, .me-auto {
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+        }
+        
+        .ps-0, .pe-0 {
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+        }
+        
+        /* Ensure proper text alignment in RTL */
+        .text-start {
+          text-align: right !important;
+        }
+        
+        .text-end {
+          text-align: left !important;
+        }
+        
+        /* Fix any potential float issues */
+        .float-start {
+          float: right !important;
+        }
+        
+        .float-end {
+          float: left !important;
+        }
+      }
+
+      /* Critical viewport fixes */
+      @media (max-width: 767.98px) {
+        /* Force viewport constraints */
+        html {
+          width: 100% !important;
+          max-width: 100% !important;
+          overflow-x: hidden !important;
+        }
+        
+        /* Override any potential Bootstrap RTL positioning */
+        .container-fluid {
+          padding-left: 15px !important;
+          padding-right: 15px !important;
+          max-width: 100% !important;
+          width: 100% !important;
+        }
+        
+        /* Ensure all sections are properly contained */
+        section, header, footer, .hero {
+          box-sizing: border-box !important;
+          width: 100% !important;
+          max-width: 100vw !important;
+          overflow-x: hidden !important;
+        }
+      }
     </style>
   </head>
   <body>
@@ -116,6 +440,7 @@
             <li class="nav-item"><a class="nav-link" href="#why">لماذا مركزنا</a></li>
             <li class="nav-item"><a class="nav-link" href="#services">الخدمات</a></li>
             <li class="nav-item"><a class="nav-link" href="#gallery">المعرض</a></li>
+            <li class="nav-item"><a class="nav-link" href="#video">الفيديو</a></li>
             <li class="nav-item"><a class="nav-link" href="#doctor">عن الدكتور</a></li>
             <li class="nav-item"><a class="nav-link" href="#contact">تواصل معنا</a></li>
             <li class="nav-item ms-lg-3"><a id="langSwitch" class="btn btn-outline-secondary btn-sm px-3" href="index-en.html">EN</a></li>
@@ -313,28 +638,100 @@
     </section>
 
     <!-- Gallery -->
-    <section id="gallery" class="py-5 bg-light">
+    <section id="gallery" class="py-5 bg-gradient-light">
       <div class="container">
-        <div class="text-center mb-4" data-aos="fade-up">
-          <h2 class="fw-bold">المعرض</h2>
-          <p class="text-secondary mb-0">صور وفيديو من مركزنا</p>
+        <div class="text-center mb-5" data-aos="fade-up">
+          <h2 class="fw-bold display-6 text-primary mb-3">معرض الصور</h2>
+          <p class="text-secondary mb-0 fs-5">تعرف على مركزنا</p>
+          <div class="mx-auto mt-3" style="width: 80px; height: 4px; background: linear-gradient(90deg, #0f6d72, #25a0a8); border-radius: 2px;"></div>
         </div>
-        <div class="row g-3 row-cols-2 row-cols-md-3 row-cols-lg-4" data-aos="fade-up">
-          <div class="col"><img src="assets/galary-1.jpeg" alt="gallery" class="img-fluid rounded-3 shadow-sm" style="height:180px;object-fit:cover" onerror="this.closest('.col').remove()" /></div>
-          <div class="col"><img src="assets/galary-2.jpeg" alt="gallery" class="img-fluid rounded-3 shadow-sm" style="height:180px;object-fit:cover" onerror="this.closest('.col').remove()" /></div>
-          <div class="col"><img src="assets/galary-3.jpeg" alt="gallery" class="img-fluid rounded-3 shadow-sm" style="height:180px;object-fit:cover" onerror="this.closest('.col').remove()" /></div>
-          <div class="col"><img src="assets/galary-4.jpeg" alt="gallery" class="img-fluid rounded-3 shadow-sm" style="height:180px;object-fit:cover" onerror="this.closest('.col').remove()" /></div>
-          <div class="col"><img src="assets/galary-5.jpeg" alt="gallery" class="img-fluid rounded-3 shadow-sm" style="height:180px;object-fit:cover" onerror="this.closest('.col').remove()" /></div>
-          <div class="col"><img src="assets/galary-6.jpeg" alt="gallery" class="img-fluid rounded-3 shadow-sm" style="height:180px;object-fit:cover" onerror="this.closest('.col').remove()" /></div>
-          <div class="col"><img src="assets/galary-8.jpeg" alt="gallery" class="img-fluid rounded-3 shadow-sm" style="height:180px;object-fit:cover" onerror="this.closest('.col').remove()" /></div>
-          <div class="col"><img src="assets/galary-9.jpeg" alt="gallery" class="img-fluid rounded-3 shadow-sm" style="height:180px;object-fit:cover" onerror="this.closest('.col').remove()" /></div>
+        <div class="row g-4 row-cols-2 row-cols-md-3 row-cols-lg-4" data-aos="fade-up">
+          <div class="col">
+            <div class="gallery-item position-relative overflow-hidden rounded-4 shadow-soft" style="height: 220px;">
+              <img src="assets/galary-1.jpeg" alt="gallery" class="img-fluid w-100 h-100" style="object-fit:cover; transition: transform 0.3s ease;" />
+              <div class="gallery-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-dark bg-opacity-50 opacity-0" style="transition: opacity 0.3s ease;">
+                <i class="bi bi-zoom-in text-white fs-1"></i>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="gallery-item position-relative overflow-hidden rounded-4 shadow-soft" style="height: 220px;">
+              <img src="assets/galary-2.jpeg" alt="gallery" class="img-fluid w-100 h-100" style="object-fit:cover; transition: transform 0.3s ease;" />
+              <div class="gallery-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-dark bg-opacity-50 opacity-0" style="transition: opacity 0.3s ease;">
+                <i class="bi bi-zoom-in text-white fs-1"></i>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="gallery-item position-relative overflow-hidden rounded-4 shadow-soft" style="height: 220px;">
+              <img src="assets/galary-3.jpeg" alt="gallery" class="img-fluid w-100 h-100" style="object-fit:cover; transition: transform 0.3s ease;" />
+              <div class="gallery-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-dark bg-opacity-50 opacity-0" style="transition: opacity 0.3s ease;">
+                <i class="bi bi-zoom-in text-white fs-1"></i>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="gallery-item position-relative overflow-hidden rounded-4 shadow-soft" style="height: 220px;">
+              <img src="assets/galary-4.jpeg" alt="gallery" class="img-fluid w-100 h-100" style="object-fit:cover; transition: transform 0.3s ease;" />
+              <div class="gallery-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-dark bg-opacity-50 opacity-0" style="transition: opacity 0.3s ease;">
+                <i class="bi bi-zoom-in text-white fs-1"></i>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="gallery-item position-relative overflow-hidden rounded-4 shadow-soft" style="height: 220px;">
+              <img src="assets/galary-5.jpeg" alt="gallery" class="img-fluid w-100 h-100" style="object-fit:cover; transition: transform 0.3s ease;" />
+              <div class="gallery-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-dark bg-opacity-50 opacity-0" style="transition: opacity 0.3s ease;">
+                <i class="bi bi-zoom-in text-white fs-1"></i>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="gallery-item position-relative overflow-hidden rounded-4 shadow-soft" style="height: 220px;">
+              <img src="assets/galary-6.jpeg" alt="gallery" class="img-fluid w-100 h-100" style="object-fit:cover; transition: transform 0.3s ease;" />
+              <div class="gallery-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-dark bg-opacity-50 opacity-0" style="transition: opacity 0.3s ease;">
+                <i class="bi bi-zoom-in text-white fs-1"></i>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="gallery-item position-relative overflow-hidden rounded-4 shadow-soft" style="height: 220px;">
+              <img src="assets/galary-8.jpeg" alt="gallery" class="img-fluid w-100 h-100" style="object-fit:cover; transition: transform 0.3s ease;" />
+              <div class="gallery-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-dark bg-opacity-50 opacity-0" style="transition: opacity 0.3s ease;">
+                <i class="bi bi-zoom-in text-white fs-1"></i>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="gallery-item position-relative overflow-hidden rounded-4 shadow-soft" style="height: 220px;">
+              <img src="assets/galary-9.jpeg" alt="gallery" class="img-fluid w-100 h-100" style="object-fit:cover; transition: transform 0.3s ease;" />
+              <div class="gallery-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-dark bg-opacity-50 opacity-0" style="transition: opacity 0.3s ease;">
+                <i class="bi bi-zoom-in text-white fs-1"></i>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="mt-4" data-aos="fade-up">
-          <div class="ratio ratio-16x9 rounded-3 shadow-sm overflow-hidden">
-            <video controls preload="metadata" poster="assets/our-message.png">
-              <source src="assets/video.mp4" type="video/mp4" />
-              <source src="assets/video.mp4" type="video/mp4" />
-            </video>
+      </div>
+    </section>
+
+    <!-- Video Section -->
+    <section id="video" class="py-5 bg-white">
+      <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+          <h2 class="fw-bold display-6 text-primary mb-3">فيديو تعريفي</h2>
+          <p class="text-secondary mb-0 fs-5">تعرف على مركز العنوان وخدماتنا</p>
+          <div class="mx-auto mt-3" style="width: 80px; height: 4px; background: linear-gradient(90deg, #0f6d72, #25a0a8); border-radius: 2px;"></div>
+        </div>
+        <div class="row justify-content-center" data-aos="fade-up">
+          <div class="col-lg-10 col-xl-8">
+            <div class="video-container position-relative rounded-4 shadow-soft overflow-hidden">
+              <div class="ratio ratio-16x9">
+                <video controls preload="metadata" poster="assets/our-message.png" class="w-100 h-100">
+                  <source src="assets/video.mp4" type="video/mp4" />
+                </video>
+              </div>
+              <div class="video-decoration position-absolute top-0 start-0 w-100 h-100 border border-3 border-primary border-opacity-25 rounded-4" style="pointer-events: none;"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -446,6 +843,45 @@
     <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 
     <script>
+      // Force mobile layout fixes on page load
+      function forceMobileLayout() {
+        if (window.innerWidth <= 767) {
+          // Force viewport constraints
+          document.documentElement.style.overflowX = 'hidden';
+          document.body.style.overflowX = 'hidden';
+          document.body.style.width = '100%';
+          document.body.style.maxWidth = '100vw';
+          document.body.style.margin = '0';
+          document.body.style.padding = '0';
+          
+          // Force container constraints
+          const containers = document.querySelectorAll('.container');
+          containers.forEach(container => {
+            container.style.maxWidth = '100%';
+            container.style.width = '100%';
+            container.style.marginLeft = '0';
+            container.style.marginRight = '0';
+          });
+          
+          // Force section constraints
+          const sections = document.querySelectorAll('section, header, footer, .hero');
+          sections.forEach(section => {
+            section.style.width = '100%';
+            section.style.maxWidth = '100vw';
+            section.style.overflowX = 'hidden';
+          });
+        }
+      }
+
+      // Run on page load
+      document.addEventListener('DOMContentLoaded', forceMobileLayout);
+      
+      // Run on window resize
+      window.addEventListener('resize', forceMobileLayout);
+      
+      // Run immediately
+      forceMobileLayout();
+
       // Init AOS animations
       AOS.init({ duration: 800, once: true, easing: "ease-out-cubic" });
 
@@ -470,6 +906,49 @@
         const hash = window.location.hash || "";
         langSwitch.href = `index-en.html${hash}`;
       }
+
+      // Enhanced navbar functionality
+      function updateActiveNavLink() {
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+        
+        let current = '';
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.clientHeight;
+          if (window.pageYOffset >= (sectionTop - 200)) {
+            current = section.getAttribute('id');
+          }
+        });
+
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === `#${current}`) {
+            link.classList.add('active');
+          }
+        });
+      }
+
+      // Update active nav link on scroll
+      window.addEventListener('scroll', updateActiveNavLink);
+      
+      // Update active nav link on page load
+      document.addEventListener('DOMContentLoaded', updateActiveNavLink);
+
+      // Smooth scrolling for all internal links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            const offsetTop = target.offsetTop - (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--navbar-height')) + parseInt(getComputedStyle(document.documentElement).getPropertyValue('--topbar-height')));
+            window.scrollTo({
+              top: offsetTop,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
     </script>
   </body>
   </html>
